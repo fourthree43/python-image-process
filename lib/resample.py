@@ -1,14 +1,22 @@
 '''
+Author: 张仕山
+Date: 2023-09-11 17:48:35
+LastEditors: 张仕山
+LastEditTime: 2023-12-11 19:05:31
+Description:  
+FilePath: \lib\resample.py
+'''
+'''
 Created on 2020年2月10日
 
 @author: Sun Strong
 '''
-from osgeo import gdal
+from osgeo import gdal, gdalconst
 import os
 import numpy as np
 
 
-def ReprojectImages2(inputfilePath,referencefilefilePath,output):
+def ReprojectImages2(inputfilePath, referencefilefilePath, outputfilePath):
     # 若采用gdal.Warp()方法进行重采样
     # 获取输出影像信息
     inputrasfile = gdal.Open(inputfilePath, gdal.GA_ReadOnly)

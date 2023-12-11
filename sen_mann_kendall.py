@@ -2,7 +2,7 @@
 Author: 张仕山
 Date: 2023-12-04 17:23:14
 LastEditors: 张仕山
-LastEditTime: 2023-12-09 21:04:57
+LastEditTime: 2023-12-11 22:55:07
 Description:  
 FilePath: \sen_mann_kendall.py
 '''
@@ -122,7 +122,7 @@ def mann_kendall(v_arr):
             mk[h][k] = z
     return mk
 
-def smk(data):
+def smk(data, mask):
     sen_im = data[0]
     mk_im = data[1]
     result = np.zeros(sen_im.shape)
@@ -136,13 +136,15 @@ def smk(data):
     result[sx_005 & mkda_196] = 3
     result[sx_005 & mkx_196] = 4
     result[sde_005] = 5
+
+    result[mask] = noData
     return result
 
 def new_input_data(path, outPath):
     e_arr = readImgDataByDirPath(inputPath, ".tif")
     sen = csen(e_arr, 3)
     mk = mann_kendall(e_arr)
-    sm = smk([sen,mk])
+    sm = smk([sen, mk], e_arr[0, :, :] == noData)
 
     print("结果输出中...")
     # writetoTIF(outPath, pro, trans, sm)
@@ -150,7 +152,7 @@ def new_input_data(path, outPath):
     # writetoTIF(r"F:\youmo\data\fujian\结果\sen_mann_kendall\sen1.tif", pro, trans, sen)
     fileFullPath = os.path.join(path, os.listdir(path)[0])
 
-    array2raster2(outPath, fileFullPath, sm, 5)
+    array2raster2(outPath, fileFullPath, sm, noData)
     print('栅格图像组变异系数计算完成')
 
 def input_data(path, outPath):
